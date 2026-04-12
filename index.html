@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ulfa Octaviani — UX Researcher & Educator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Outfit:wght@300;400;500&family=Space+Mono&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #FAFAF7;
+    --surface: #FFFFFF;
+    --ink: #18180F;
+    --ink-muted: #6A6A58;
+    --ink-faint: #AEAE98;
+    --rust: #C2410C;
+    --rust-bg: #FFF7ED;
+    --rust-border: #FED7AA;
+    --sage: #3D6B45;
+    --sage-bg: #F0FDF4;
+    --sage-border: #BBF7D0;
+    --plum: #6B21A8;
+    --plum-bg: #FAF5FF;
+    --plum-border: #E9D5FF;
+    --border: rgba(24,24,15,0.09);
+    --border-med: rgba(24,24,15,0.16);
+    --r: 4px;
+    --rl: 10px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Outfit', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    height: 56px;
+    background: rgba(250,250,247,0.92);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2.5rem;
+  }
+  .nav-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: -0.2px;
+  }
+  .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+  .nav-links a {
+    font-size: 12px; font-weight: 400; letter-spacing: 0.07em;
+    text-transform: uppercase; color: var(--ink-muted); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--ink); }
+
+  /* ── LAYOUT ── */
+  main { padding-top: 56px; }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 0 2.5rem; }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 5.5rem 0 4rem;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 4rem;
+    align-items: start;
+    animation: fadeUp 0.7s ease both;
+  }
+  .hero-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 1rem;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 5vw, 4.2rem);
+    line-height: 1.08;
+    letter-spacing: -1.5px;
+    margin-bottom: 1.2rem;
+    color: var(--ink);
+  }
+  .hero h1 span { font-style: italic; color: var(--rust); }
+  .hero-bio {
+    font-size: 1.05rem;
+    color: var(--ink-muted);
+    line-height: 1.8;
+    max-width: 500px;
+    margin-bottom: 1.8rem;
+    font-weight: 300;
+  }
+  .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 2rem; }
+  .pill {
+    font-family: 'Space Mono', monospace;
+    font-size: 10.5px;
+    padding: 5px 11px;
+    border-radius: 20px;
+    border: 1px solid var(--border-med);
+    color: var(--ink-muted);
+    background: var(--surface);
+    letter-spacing: 0.04em;
+  }
+  .pill.ux   { background: var(--rust-bg); border-color: var(--rust-border); color: var(--rust); }
+  .pill.edu  { background: var(--sage-bg); border-color: var(--sage-border); color: var(--sage); }
+  .pill.res  { background: var(--plum-bg); border-color: var(--plum-border); color: var(--plum); }
+  .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 22px; border-radius: var(--r);
+    font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 400;
+    text-decoration: none; cursor: pointer; transition: all 0.2s; border: 1px solid transparent;
+  }
+  .btn-dark  { background: var(--ink); color: var(--bg); }
+  .btn-dark:hover { background: #333325; }
+  .btn-ghost { background: transparent; color: var(--ink); border-color: var(--border-med); }
+  .btn-ghost:hover { background: var(--surface); }
+
+  /* hero cards column */
+  .hero-cards { display: flex; flex-direction: column; gap: 14px; animation: fadeUp 0.7s ease 0.12s both; }
+  .hcard {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--rl);
+    padding: 1.1rem 1.3rem;
+    position: relative; overflow: hidden;
+  }
+  .hcard::after {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 3px; height: 100%;
+  }
+  .hcard.industry::after { background: var(--rust); }
+  .hcard.academia::after { background: var(--sage); }
+  .hcard.research::after { background: var(--plum); }
+  .hcard .lbl {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--ink-faint); margin-bottom: 5px;
+  }
+  .hcard .htitle { font-weight: 500; font-size: 14px; margin-bottom: 2px; }
+  .hcard .horg { font-size: 12.5px; color: var(--ink-muted); }
+  .hcard .hdate { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--ink-faint); margin-top: 6px; }
+
+  .metrics { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 4px; }
+  .metric {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--rl); padding: 0.9rem; text-align: center;
+  }
+  .metric .n {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.9rem; color: var(--ink); line-height: 1; margin-bottom: 3px;
+  }
+  .metric .d { font-size: 11px; color: var(--ink-muted); font-weight: 400; }
+
+  /* ── SECTION COMMONS ── */
+  section { padding: 5.5rem 0; }
+  .s-label {
+    font-family: 'Space Mono', monospace; font-size: 10.5px;
+    text-transform: uppercase; letter-spacing: 0.15em; color: var(--ink-faint);
+    margin-bottom: 6px;
+  }
+  .s-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.75rem, 3vw, 2.3rem);
+    letter-spacing: -0.5px; margin-bottom: 2.8rem; line-height: 1.2;
+  }
+  .divider { border: none; border-top: 1px solid var(--border); }
+
+  /* ── EXPERIENCE ── */
+  .exp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3.5rem; }
+  .track-badge {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.1em;
+    padding: 4px 12px; border-radius: 20px; margin-bottom: 1.6rem; font-weight: 400;
+  }
+  .track-badge.industry { background: var(--rust-bg); border: 1px solid var(--rust-border); color: var(--rust); }
+  .track-badge.academia { background: var(--sage-bg); border: 1px solid var(--sage-border); color: var(--sage); }
+
+  .tl { position: relative; padding-left: 1.3rem; }
+  .tl::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 1px; background: var(--border);
+  }
+  .tl-item { position: relative; margin-bottom: 2.4rem; }
+  .tl-item::before {
+    content: ''; position: absolute; left: -1.62rem; top: 6px;
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--ink-faint); border: 2px solid var(--bg);
+  }
+  .tl-item.now::before { background: var(--rust); }
+  .tl-date {
+    font-family: 'Space Mono', monospace;
+    font-size: 10.5px; color: var(--ink-faint); margin-bottom: 2px; letter-spacing: 0.06em;
+  }
+  .tl-role { font-weight: 500; font-size: 14.5px; margin-bottom: 1px; }
+  .tl-org  { font-size: 13px; color: var(--rust); margin-bottom: 6px; }
+  .tl-org.sage { color: var(--sage); }
+  .tl-desc { font-size: 13px; color: var(--ink-muted); line-height: 1.65; }
+  .tl-desc ul { padding-left: 1rem; }
+  .tl-desc li { margin-bottom: 3px; }
+
+  /* ── SKILLS ── */
+  .skills-wrap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .sk-group {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--rl); padding: 1.3rem;
+  }
+  .sk-title {
+    font-family: 'Space Mono', monospace; font-size: 10.5px;
+    text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint);
+    margin-bottom: 12px;
+  }
+  .sk-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 0; border-bottom: 1px solid var(--border);
+    font-size: 13.5px; color: var(--ink);
+  }
+  .sk-item:last-child { border: none; }
+  .bar-wrap { width: 56px; height: 3px; background: var(--border); border-radius: 2px; }
+  .bar { height: 100%; border-radius: 2px; background: var(--rust); }
+
+  /* ── RESEARCH / PROJECTS ── */
+  .cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--rl); padding: 1.3rem 1.4rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .card:hover { border-color: var(--border-med); transform: translateY(-2px); }
+  .card-type {
+    font-family: 'Space Mono', monospace; font-size: 10.5px;
+    text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint);
+    margin-bottom: 7px;
+  }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.0rem; line-height: 1.4; margin-bottom: 8px;
+  }
+  .card-body { font-size: 13px; color: var(--ink-muted); line-height: 1.65; }
+  .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .tag {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    padding: 3px 8px; border-radius: 20px;
+    border: 1px solid var(--border); color: var(--ink-muted); background: var(--bg);
+  }
+
+  /* ── HONOURS ── */
+  .honours-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .honour {
+    background: #FFFBF5; border: 1px solid #FFE4B5;
+    border-radius: var(--rl); padding: 1.2rem 1.4rem;
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .honour-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .honour-title { font-weight: 500; font-size: 14px; color: #92400E; margin-bottom: 3px; }
+  .honour-body  { font-size: 13px; color: #B45309; line-height: 1.5; }
+
+  /* ── VOLUNTEER ── */
+  .vol-list { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+  .vol-item {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--rl); padding: 1rem 1.2rem;
+    font-size: 13px;
+  }
+  .vol-item .vo { font-weight: 500; margin-bottom: 3px; }
+  .vol-item .vd { font-size: 12px; color: var(--ink-muted); }
+
+  /* ── CONTACT ── */
+  .contact-box {
+    background: var(--ink); color: var(--bg);
+    border-radius: 14px; padding: 3.5rem 3rem;
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 2.5rem; align-items: center; margin-bottom: 3rem;
+  }
+  .contact-box h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 400; letter-spacing: -0.5px; line-height: 1.2;
+  }
+  .contact-box p { color: rgba(250,250,247,0.55); margin-top: 8px; font-size: 14.5px; }
+  .clinks { display: flex; flex-direction: column; gap: 9px; }
+  .clink {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 14px; background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1); border-radius: var(--r);
+    font-size: 12.5px; color: var(--bg); text-decoration: none;
+    font-family: 'Space Mono', monospace; transition: background 0.2s; white-space: nowrap;
+  }
+  .clink:hover { background: rgba(255,255,255,0.14); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border); padding: 1.8rem 0;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 11px; color: var(--ink-faint); font-family: 'Space Mono', monospace;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 740px) {
+    .hero { grid-template-columns: 1fr; padding: 3rem 0 2rem; }
+    .exp-grid { grid-template-columns: 1fr; }
+    .skills-wrap { grid-template-columns: 1fr 1fr; }
+    .cards-grid { grid-template-columns: 1fr; }
+    .honours-grid { grid-template-columns: 1fr; }
+    .vol-list { grid-template-columns: 1fr 1fr; }
+    .contact-box { grid-template-columns: 1fr; padding: 2rem; }
+    .metrics { grid-template-columns: repeat(3,1fr); }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-name">Ulfa Octaviani</a>
+  <ul class="nav-links">
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#research">Research</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#honours">Honours</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<main>
+<div class="wrap">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div>
+      <p class="hero-eyebrow">UX Researcher · Educator · PhD</p>
+      <h1>Ulfa <span>Octaviani</span></h1>
+      <p class="hero-bio">
+        Researcher and educator bridging inclusive design, human-computer interaction, and teaching. Currently investigating inclusive data visualisation at City &amp; St. George's, University of London — and helping the next generation of designers and engineers think critically about technology.
+      </p>
+      <div class="pill-row">
+        <span class="pill ux">UX Research</span>
+        <span class="pill ux">Usability Testing</span>
+        <span class="pill edu">Teaching Fellow</span>
+        <span class="pill edu">Figma &amp; React</span>
+        <span class="pill res">Inclusive Design</span>
+        <span class="pill res">Data Visualisation</span>
+        <span class="pill">Fulbright Scholar</span>
+        <span class="pill">London, UK</span>
+      </div>
+      <div class="hero-cta">
+        <a href="#contact" class="btn btn-dark">Get in touch ↗</a>
+        <a href="https://www.linkedin.com/in/ulfaoctaviani/" class="btn btn-ghost">LinkedIn</a>
+      </div>
+    </div>
+
+    <div class="hero-cards">
+      <div class="hcard research">
+        <div class="lbl">Current · Research</div>
+        <div class="htitle">Researcher, Inclusive Data Visualisation</div>
+        <div class="horg">City &amp; St. George's, University of London</div>
+        <div class="hdate">Oct 2024 – Present</div>
+      </div>
+      <div class="hcard academia">
+        <div class="lbl">Recent · Teaching</div>
+        <div class="htitle">Teaching Fellow</div>
+        <div class="horg">Queen Mary University of London</div>
+        <div class="hdate">Jan 2024 – Oct 2024</div>
+      </div>
+      <div class="hcard industry">
+        <div class="lbl">PhD</div>
+        <div class="htitle">Media, Arts &amp; Technology</div>
+        <div class="horg">Queen Mary University of London</div>
+        <div class="hdate">Sep 2018 – Oct 2024</div>
+      </div>
+      <div class="metrics">
+        <div class="metric"><div class="n">3</div><div class="d">Degrees</div></div>
+        <div class="metric"><div class="n">10+</div><div class="d">Yrs Experience</div></div>
+        <div class="metric"><div class="n">400+</div><div class="d">Students taught</div></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <p class="s-label">Career Path</p>
+    <h2 class="s-heading">Industry &amp; Academia</h2>
+
+    <div class="exp-grid">
+      <!-- Industry -->
+      <div>
+        <span class="track-badge industry">Industry Track</span>
+        <div class="tl">
+
+          <div class="tl-item now">
+            <div class="tl-date">Oct 2024 – Present</div>
+            <div class="tl-role">Researcher in Inclusive Data Visualisation</div>
+            <div class="tl-org">City &amp; St. George's, University of London</div>
+            <div class="tl-desc">Analysing data and extracting user needs from exploratory studies in inclusive data visualisation. Co-designing with fellow researchers and people with aphasia and developmental language disorder.</div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-date">Dec 2023 – Jan 2024</div>
+            <div class="tl-role">Usability Testing Consultant</div>
+            <div class="tl-org">Queen Mary University of London</div>
+            <div class="tl-desc">Conducted usability testing to inform developers and reported findings to the principal researcher for a staging application.</div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-date">Jul 2022 – Aug 2022</div>
+            <div class="tl-role">User Experience Researcher</div>
+            <div class="tl-org">Queen Mary University of London</div>
+            <div class="tl-desc">Led usability testing and research studies to inform design of client prototypes. Prepared, conducted, and reported usability studies to stakeholders.</div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-date">Apr 2019 – Sep 2019</div>
+            <div class="tl-role">Advanced Placement Project Intern</div>
+            <div class="tl-org" style="color:var(--rust)">BBC, London</div>
+            <div class="tl-desc">Conducted a usability study of an interactive R&amp;D application. Ran data analysis in R and contributed to a white paper for the department.</div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-date">Jun 2018 – Sep 2018</div>
+            <div class="tl-role">Innovation Consultant</div>
+            <div class="tl-org" style="color:var(--rust)">Traveloka, Jakarta</div>
+            <div class="tl-desc">Created marketing plans via Google Adwords and Facebook. Conducted independent research on travel experience — designed experiments, recruited participants, and analysed data.</div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-date">Dec 2017 – Jun 2018</div>
+            <div class="tl-role">Senior Product Consultant &amp; Interaction Designer</div>
+            <div class="tl-org" style="color:var(--rust)">Kofera, Jakarta</div>
+            <div class="tl-desc">Worked with engineering, marketing, and finance teams to ship new features. Conducted UX studies, developed wireframes and prototypes, and managed stakeholder relationships.</div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-date">Jan 2014 – Aug 2014</div>
+            <div class="tl-role">User Experience Research Intern</div>
+            <div class="tl-org" style="color:var(--rust)">Tekzenit Inc., Texas, USA</div>
+            <div class="tl-desc">Assisted usability testing across multiple applications — heuristic analysis, card sorts, eye-tracking. Wrote research reports and presentations for clients.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Academia -->
+      <div>
+        <span class="track-badge academia">Academia Track</span>
+        <div class="tl">
+
+          <div class="tl-item now">
+            <div class="tl-date">Jan 2024 – Oct 2024</div>
+            <div class="tl-role">Teaching Fellow</div>
+            <div class="tl-org sage">Queen Mary University of London</div>
+            <div class="tl-desc">Supervised undergraduate final-year projects. Designed and delivered Figma &amp; React lectures for the Graphic User Interface module (400+ students). Trained demonstrators and designed assignments and workshops.</div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-date">Jan 2023 – Sep 2023</div>
+            <div class="tl-role">Associate Lecturer</div>
+            <div class="tl-org sage">University of the Arts London</div>
+            <div class="tl-desc">Co-taught MA IE Computational Inequality and MA DSAI Personalisation &amp; Machine Learning. Taught creative computation with P5 and ml5.js. Supervised MA student theses.</div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-date">Sep 2018 – Oct 2024</div>
+            <div class="tl-role">PhD Researcher — Media, Arts &amp; Technology</div>
+            <div class="tl-org sage">Queen Mary University of London</div>
+            <div class="tl-desc">PhD scholarship in the EECS department (Sep 2018 – Jun 2023). Research at the intersection of HCI, inclusive design, and data visualisation.</div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-date">Aug 2006 – 2011</div>
+            <div class="tl-role">B.S. Biology (GPA 3.15)</div>
+            <div class="tl-org sage">Bandung Institute of Technology, Indonesia</div>
+            <div class="tl-desc">Lab assistant in Medical Instrumentation Laboratory. Teaching assistant for Statistics, Animal Behaviour, General Biology, and Ethnobotany.</div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-date">Aug 2013 – May 2015</div>
+            <div class="tl-role">MS Applied Cognition &amp; Neuroscience (GPA 3.9)</div>
+            <div class="tl-org sage">University of Texas at Dallas, USA</div>
+            <div class="tl-desc">Fulbright Scholar. Focused on cognitive science, perception, and human factors — foundation for UX research specialisation.</div>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-date">May 2012 – Jan 2013</div>
+            <div class="tl-role">ESL Teacher</div>
+            <div class="tl-org sage">English First, Bandung, Indonesia</div>
+            <div class="tl-desc">Taught English as a Second Language to adults, teenagers, and children.</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- RESEARCH & PROJECTS -->
+  <section id="research">
+    <p class="s-label">Focus Areas</p>
+    <h2 class="s-heading">Research &amp; Projects</h2>
+
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-type">Current Research · City &amp; St. George's</div>
+        <div class="card-title">Inclusive Data Visualisation for People with Aphasia &amp; DLD</div>
+        <div class="card-body">Exploratory study co-designing accessible data visualisation approaches with people with aphasia and developmental language disorder. Extracting user needs through participatory research methods.</div>
+        <div class="card-tags"><span class="tag">Co-design</span><span class="tag">Aphasia</span><span class="tag">Accessibility</span><span class="tag">Data Viz</span></div>
+      </div>
+      <div class="card">
+        <div class="card-type">PhD Research · Queen Mary University of London</div>
+        <div class="card-title">Media, Arts &amp; Technology — HCI &amp; Inclusive Design</div>
+        <div class="card-body">Six-year doctoral programme within EECS, examining intersections of human-computer interaction, participatory design, and emerging media. EECS scholarship recipient 2018–2023.</div>
+        <div class="card-tags"><span class="tag">HCI</span><span class="tag">PhD</span><span class="tag">Inclusive Design</span><span class="tag">QMUL</span></div>
+      </div>
+      <div class="card">
+        <div class="card-type">Industry Project · BBC R&amp;D, 2019</div>
+        <div class="card-title">Usability Study &amp; White Paper — Interactive R&amp;D Application</div>
+        <div class="card-body">End-to-end usability study for an interactive BBC R&amp;D product: recruited participants, ran sessions, analysed data in R, and authored a white paper submitted to the department.</div>
+        <div class="card-tags"><span class="tag">Usability Testing</span><span class="tag">R</span><span class="tag">BBC</span><span class="tag">White Paper</span></div>
+      </div>
+      <div class="card">
+        <div class="card-type">Teaching Project · QMUL &amp; UAL, 2023–2024</div>
+        <div class="card-title">GUI Curriculum: Figma, React &amp; Computational Inequality</div>
+        <div class="card-body">Designed and delivered an updated GUI module curriculum for 400+ students, plus co-taught MA courses on computational inequality and machine learning for personalisation at UAL.</div>
+        <div class="card-tags"><span class="tag">Figma</span><span class="tag">React</span><span class="tag">Curriculum Design</span><span class="tag">400+ Students</span></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <p class="s-label">Technical Proficiency</p>
+    <h2 class="s-heading">Skills &amp; Tools</h2>
+
+    <div class="skills-wrap">
+      <div class="sk-group">
+        <div class="sk-title">UX Research Methods</div>
+        <div class="sk-item"><span>Usability Testing</span><div class="bar-wrap"><div class="bar" style="width:95%"></div></div></div>
+        <div class="sk-item"><span>Contextual Inquiry</span><div class="bar-wrap"><div class="bar" style="width:90%"></div></div></div>
+        <div class="sk-item"><span>Surveys &amp; Interviews</span><div class="bar-wrap"><div class="bar" style="width:92%"></div></div></div>
+        <div class="sk-item"><span>Thematic Analysis</span><div class="bar-wrap"><div class="bar" style="width:88%"></div></div></div>
+        <div class="sk-item"><span>Co-design Methods</span><div class="bar-wrap"><div class="bar" style="width:85%"></div></div></div>
+      </div>
+      <div class="sk-group">
+        <div class="sk-title">Design &amp; Prototyping</div>
+        <div class="sk-item"><span>Figma</span><div class="bar-wrap"><div class="bar" style="width:90%"></div></div></div>
+        <div class="sk-item"><span>Adobe XD</span><div class="bar-wrap"><div class="bar" style="width:80%"></div></div></div>
+        <div class="sk-item"><span>InVision</span><div class="bar-wrap"><div class="bar" style="width:80%"></div></div></div>
+        <div class="sk-item"><span>Adobe Creative Suite</span><div class="bar-wrap"><div class="bar" style="width:75%"></div></div></div>
+        <div class="sk-item"><span>Wireframing</span><div class="bar-wrap"><div class="bar" style="width:90%"></div></div></div>
+      </div>
+      <div class="sk-group">
+        <div class="sk-title">Programming &amp; Data</div>
+        <div class="sk-item"><span>HTML &amp; CSS</span><div class="bar-wrap"><div class="bar" style="width:85%"></div></div></div>
+        <div class="sk-item"><span>JavaScript / React</span><div class="bar-wrap"><div class="bar" style="width:75%"></div></div></div>
+        <div class="sk-item"><span>R / SPSS</span><div class="bar-wrap"><div class="bar" style="width:78%"></div></div></div>
+        <div class="sk-item"><span>P5.js / ml5.js</span><div class="bar-wrap"><div class="bar" style="width:70%"></div></div></div>
+        <div class="sk-item"><span>Python / Unity</span><div class="bar-wrap"><div class="bar" style="width:40%"></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- HONOURS -->
+  <section id="honours">
+    <p class="s-label">Recognition</p>
+    <h2 class="s-heading">Honours &amp; Scholarships</h2>
+
+    <div class="honours-grid">
+      <div class="honour">
+        <div class="honour-icon">🏛️</div>
+        <div>
+          <div class="honour-title">Fulbright Scholarship</div>
+          <div class="honour-body">US government scholarship for outstanding international students. Funded MS studies at the University of Texas at Dallas, 2013–2015.</div>
+        </div>
+      </div>
+      <div class="honour">
+        <div class="honour-icon">🎓</div>
+        <div>
+          <div class="honour-title">PhD Award — Media &amp; Arts Technology, EECS</div>
+          <div class="honour-body">Queen Mary University of London doctoral scholarship. Supported six years of research in HCI and inclusive design, September 2018 – June 2023.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- VOLUNTEER -->
+  <section>
+    <p class="s-label">Community</p>
+    <h2 class="s-heading">Volunteer Experience</h2>
+
+    <div class="vol-list">
+      <div class="vol-item">
+        <div class="vo">Google Student Developer Club</div>
+        <div class="vd">Lead — organised events · London, 2022–2023</div>
+      </div>
+      <div class="vol-item">
+        <div class="vo">Hyper Japan</div>
+        <div class="vd">Backstage &amp; workshop prep · London, 2022</div>
+      </div>
+      <div class="vol-item">
+        <div class="vo">The London Coffee Festival</div>
+        <div class="vd">Waterfall project rotation · London, 2022</div>
+      </div>
+      <div class="vol-item">
+        <div class="vo">Open Iftar</div>
+        <div class="vd">Food service · London &amp; Cambridge, 2022</div>
+      </div>
+      <div class="vol-item">
+        <div class="vo">Olio — Food Waste Hero</div>
+        <div class="vd">Collected surplus food from shops · London, 2018</div>
+      </div>
+      <div class="vol-item">
+        <div class="vo">Inter/change 2018</div>
+        <div class="vd">Stage team volunteer · London, 2018</div>
+      </div>
+      <div class="vol-item">
+        <div class="vo">Smansa Foundation</div>
+        <div class="vd">Liaison officer &amp; web developer · Indonesia, 2015</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-box">
+      <div>
+        <h2>Let's collaborate<br><em style="font-style:italic; color:#FDA4AF;">on something meaningful.</em></h2>
+        <p>Open to research collaborations, UX consulting, teaching opportunities, and speaking invitations.</p>
+      </div>
+      <div class="clinks">
+        <a href="mailto:uoctaviani@gmail.com" class="clink">✉ uoctaviani@gmail.com</a>
+        <a href="https://www.linkedin.com/in/ulfaoctaviani/" class="clink">in linkedin.com/in/ulfaoctaviani</a>
+        <a href="tel:+447427659668" class="clink">✆ +44 7427 659668</a>
+      </div>
+    </div>
+
+    <footer>
+      <span>© 2026 Ulfa Octaviani</span>
+      <span>London, United Kingdom</span>
+    </footer>
+  </section>
+
+</div>
+</main>
+</body>
+</html>
