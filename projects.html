@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Research & Projects — Ulfa Octaviani</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Outfit:wght@300;400;500&family=Space+Mono&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #FAFAF7;
+    --surface: #FFFFFF;
+    --ink: #18180F;
+    --ink-muted: #6A6A58;
+    --ink-faint: #AEAE98;
+    --rust: #C2410C;
+    --rust-bg: #FFF7ED;
+    --rust-border: #FED7AA;
+    --sage: #3D6B45;
+    --sage-bg: #F0FDF4;
+    --sage-border: #BBF7D0;
+    --plum: #6B21A8;
+    --plum-bg: #FAF5FF;
+    --plum-border: #E9D5FF;
+    --teal: #0E7490;
+    --teal-bg: #ECFEFF;
+    --teal-border: #A5F3FC;
+    --border: rgba(24,24,15,0.09);
+    --border-med: rgba(24,24,15,0.16);
+    --r: 4px;
+    --rl: 10px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Outfit', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    height: 56px;
+    background: rgba(250,250,247,0.92);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2.5rem;
+  }
+  .nav-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: -0.2px;
+  }
+  .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+  .nav-links a {
+    font-size: 12px; font-weight: 400; letter-spacing: 0.07em;
+    text-transform: uppercase; color: var(--ink-muted); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--ink); }
+
+  /* ── LAYOUT ── */
+  main { padding-top: 56px; }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 0 2.5rem; }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    padding: 4rem 0 3rem;
+    animation: fadeUp 0.7s ease both;
+  }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'Space Mono', monospace; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--ink-faint); text-decoration: none;
+    margin-bottom: 1.8rem;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: var(--rust); }
+  .page-header .eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--rust); margin-bottom: 0.8rem;
+  }
+  .page-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    line-height: 1.1; letter-spacing: -1px;
+    margin-bottom: 1rem;
+  }
+  .page-header h1 em { font-style: italic; color: var(--rust); }
+  .page-header .sub {
+    font-size: 1.05rem; color: var(--ink-muted);
+    max-width: 560px; line-height: 1.75;
+  }
+
+  /* ── FILTER BAR ── */
+  .filter-bar {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    padding: 1.6rem 0 2.4rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 3rem;
+  }
+  .filter-btn {
+    font-family: 'Space Mono', monospace; font-size: 10.5px;
+    padding: 5px 14px; border-radius: 20px;
+    border: 1px solid var(--border-med); color: var(--ink-muted);
+    background: var(--surface); letter-spacing: 0.05em;
+    cursor: pointer; transition: all 0.18s; text-transform: uppercase;
+  }
+  .filter-btn:hover { border-color: var(--rust); color: var(--rust); background: var(--rust-bg); }
+  .filter-btn.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+  /* ── PROJECT CARDS ── */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 5rem;
+  }
+
+  .proj-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--rl);
+    padding: 1.5rem 1.6rem 1.4rem;
+    display: flex; flex-direction: column; gap: 10px;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    position: relative; overflow: hidden;
+    animation: fadeUp 0.55s ease both;
+  }
+  .proj-card:hover {
+    border-color: var(--border-med);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(24,24,15,0.07);
+  }
+  .proj-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    height: 3px; width: 100%;
+  }
+  .proj-card.cat-research::before  { background: var(--plum); }
+  .proj-card.cat-industry::before  { background: var(--rust); }
+  .proj-card.cat-teaching::before  { background: var(--sage); }
+  .proj-card.cat-phd::before       { background: var(--teal); }
+
+  .proj-meta {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  }
+  .proj-type {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint);
+  }
+  .proj-badge {
+    font-family: 'Space Mono', monospace; font-size: 9.5px;
+    padding: 3px 9px; border-radius: 20px;
+    text-transform: uppercase; letter-spacing: 0.06em; flex-shrink: 0;
+  }
+  .badge-research { background: var(--plum-bg); border: 1px solid var(--plum-border); color: var(--plum); }
+  .badge-industry { background: var(--rust-bg); border: 1px solid var(--rust-border); color: var(--rust); }
+  .badge-teaching { background: var(--sage-bg); border: 1px solid var(--sage-border); color: var(--sage); }
+  .badge-phd      { background: var(--teal-bg); border: 1px solid var(--teal-border); color: var(--teal); }
+
+  .proj-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem; line-height: 1.35; color: var(--ink);
+  }
+
+  .proj-body { font-size: 13px; color: var(--ink-muted); line-height: 1.68; flex: 1; }
+
+  .proj-outcomes {
+    margin-top: 4px;
+    padding: 10px 12px;
+    background: var(--bg);
+    border-radius: var(--r);
+    border: 1px solid var(--border);
+  }
+  .proj-outcomes .out-label {
+    font-family: 'Space Mono', monospace; font-size: 9.5px;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--ink-faint); margin-bottom: 6px;
+  }
+  .proj-outcomes ul {
+    list-style: none; display: flex; flex-direction: column; gap: 4px;
+  }
+  .proj-outcomes li {
+    font-size: 12.5px; color: var(--ink-muted);
+    display: flex; gap: 7px; align-items: baseline;
+  }
+  .proj-outcomes li::before {
+    content: '→'; font-family: 'Space Mono', monospace;
+    font-size: 10px; color: var(--rust); flex-shrink: 0; margin-top: 1px;
+  }
+
+  .proj-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+  .tag {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    padding: 3px 8px; border-radius: 20px;
+    border: 1px solid var(--border); color: var(--ink-muted); background: var(--bg);
+  }
+
+  /* ── FEATURED (full-width) card ── */
+  .proj-card.featured {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 2rem;
+  }
+  .proj-card.featured .proj-left { display: flex; flex-direction: column; gap: 10px; }
+  .proj-card.featured .proj-right { display: flex; flex-direction: column; gap: 10px; }
+
+  /* ── SECTION DIVIDER ── */
+  .section-label {
+    font-family: 'Space Mono', monospace; font-size: 10.5px;
+    text-transform: uppercase; letter-spacing: 0.15em;
+    color: var(--ink-faint); margin-bottom: 1.4rem;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-label::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border); padding: 1.8rem 0;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 11px; color: var(--ink-faint); font-family: 'Space Mono', monospace;
+    margin-top: 2rem;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .proj-card:nth-child(1) { animation-delay: 0.05s; }
+  .proj-card:nth-child(2) { animation-delay: 0.12s; }
+  .proj-card:nth-child(3) { animation-delay: 0.18s; }
+  .proj-card:nth-child(4) { animation-delay: 0.24s; }
+  .proj-card:nth-child(5) { animation-delay: 0.30s; }
+  .proj-card:nth-child(6) { animation-delay: 0.36s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 740px) {
+    .projects-grid { grid-template-columns: 1fr; }
+    .proj-card.featured { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-name">Ulfa Octaviani</a>
+  <ul class="nav-links">
+    <li><a href="index.html#experience">Experience</a></li>
+    <li><a href="projects.html" class="active">Research &amp; Projects</a></li>
+    <li><a href="index.html#skills">Skills</a></li>
+    <li><a href="index.html#honours">Honours</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<main>
+<div class="wrap">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <a href="index.html" class="back-link">← Back to portfolio</a>
+    <p class="eyebrow">Focus Areas</p>
+    <h1>Research &amp; <em>Projects</em></h1>
+    <p class="sub">A collection of UX research, academic projects, and industry collaborations spanning inclusive design, HCI, usability, and education.</p>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar" id="filter-bar">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="research">Research</button>
+    <button class="filter-btn" data-filter="industry">Industry</button>
+    <button class="filter-btn" data-filter="teaching">Teaching</button>
+    <button class="filter-btn" data-filter="phd">PhD</button>
+  </div>
+
+  <!-- PROJECTS GRID -->
+  <div class="section-label">Featured</div>
+
+  <div class="projects-grid" id="projects-grid">
+
+    <!-- FEATURED: Inclusive Data Vis -->
+    <div class="proj-card cat-research featured" data-cat="research">
+      <div class="proj-left">
+        <div class="proj-meta">
+          <span class="proj-type">Current Research · City &amp; St. George's · Oct 2024 – Present</span>
+          <span class="proj-badge badge-research">Research</span>
+        </div>
+        <div class="proj-title">Inclusive Data Visualisation for People with Aphasia &amp; Developmental Language Disorder</div>
+        <div class="proj-body">Exploratory study co-designing accessible data visualisation approaches with people with aphasia and developmental language disorder. The work centres participatory methods to extract user needs and uncover barriers to data comprehension — with the goal of producing design guidelines for more inclusive charts, dashboards, and infographics.</div>
+        <div class="proj-tags">
+          <span class="tag">Co-design</span>
+          <span class="tag">Aphasia</span>
+          <span class="tag">DLD</span>
+          <span class="tag">Accessibility</span>
+          <span class="tag">Data Visualisation</span>
+          <span class="tag">Participatory Research</span>
+        </div>
+      </div>
+      <div class="proj-right">
+        <div class="proj-outcomes">
+          <div class="out-label">Key Activities</div>
+          <ul>
+            <li>Analysing qualitative data from co-design sessions with participants with aphasia and DLD</li>
+            <li>Extracting user needs and accessibility barriers to inform design guidelines</li>
+            <li>Collaborating with interdisciplinary research team across City &amp; St. George's</li>
+            <li>Contributing to academic publication pipeline on inclusive visualisation</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- BBC R&D -->
+    <div class="proj-card cat-industry" data-cat="industry">
+      <div class="proj-meta">
+        <span class="proj-type">Industry Project · BBC R&amp;D · 2019</span>
+        <span class="proj-badge badge-industry">Industry</span>
+      </div>
+      <div class="proj-title">Usability Study &amp; White Paper — BBC R&amp;D Interactive Application</div>
+      <div class="proj-body">End-to-end usability study for an interactive R&amp;D product at the BBC. Recruited participants, designed and ran sessions, analysed data in R, and authored a white paper for the department. The research directly informed the development team's design decisions.</div>
+      <div class="proj-outcomes">
+        <div class="out-label">Deliverables</div>
+        <ul>
+          <li>Full usability study from recruitment to final report</li>
+          <li>Quantitative data analysis in R</li>
+          <li>White paper submitted to BBC R&amp;D department</li>
+        </ul>
+      </div>
+      <div class="proj-tags">
+        <span class="tag">Usability Testing</span>
+        <span class="tag">R</span>
+        <span class="tag">BBC</span>
+        <span class="tag">White Paper</span>
+      </div>
+    </div>
+
+    <!-- PhD RESEARCH -->
+    <div class="proj-card cat-phd" data-cat="phd">
+      <div class="proj-meta">
+        <span class="proj-type">PhD Research · QMUL · 2018–2024</span>
+        <span class="proj-badge badge-phd">PhD</span>
+      </div>
+      <div class="proj-title">Media, Arts &amp; Technology — HCI &amp; Inclusive Design (Doctoral Research)</div>
+      <div class="proj-body">Six-year doctoral programme within EECS at Queen Mary University of London, examining intersections of human-computer interaction, participatory design, and emerging media. Awarded the EECS scholarship (2018–2023). Research positioned at the boundary between digital accessibility, creative technology, and user-centred design.</div>
+      <div class="proj-outcomes">
+        <div class="out-label">Research Areas</div>
+        <ul>
+          <li>HCI methods and participatory design frameworks</li>
+          <li>Inclusive design for marginalised user groups</li>
+          <li>Emerging media &amp; creative computation</li>
+        </ul>
+      </div>
+      <div class="proj-tags">
+        <span class="tag">HCI</span>
+        <span class="tag">PhD</span>
+        <span class="tag">Inclusive Design</span>
+        <span class="tag">QMUL</span>
+        <span class="tag">EECS Scholarship</span>
+      </div>
+    </div>
+
+    <!-- GUI CURRICULUM -->
+    <div class="proj-card cat-teaching" data-cat="teaching">
+      <div class="proj-meta">
+        <span class="proj-type">Teaching Project · QMUL &amp; UAL · 2023–2024</span>
+        <span class="proj-badge badge-teaching">Teaching</span>
+      </div>
+      <div class="proj-title">GUI Curriculum Redesign: Figma, React &amp; Computational Inequality</div>
+      <div class="proj-body">Designed and delivered an updated Graphic User Interface module curriculum reaching 400+ undergraduate students at QMUL. Developed Figma and React lecture content, practical workshops, and assignment briefs. Simultaneously co-taught MA-level courses on Computational Inequality and Machine Learning for Personalisation at UAL.</div>
+      <div class="proj-outcomes">
+        <div class="out-label">Impact</div>
+        <ul>
+          <li>400+ students reached across GUI module</li>
+          <li>Trained demonstrators on new tools and pedagogy</li>
+          <li>Co-taught 2 MA courses at University of the Arts London</li>
+        </ul>
+      </div>
+      <div class="proj-tags">
+        <span class="tag">Figma</span>
+        <span class="tag">React</span>
+        <span class="tag">Curriculum Design</span>
+        <span class="tag">400+ Students</span>
+        <span class="tag">P5.js</span>
+        <span class="tag">ml5.js</span>
+      </div>
+    </div>
+
+    <!-- USABILITY CONSULTING -->
+    <div class="proj-card cat-industry" data-cat="industry">
+      <div class="proj-meta">
+        <span class="proj-type">Consulting · QMUL · Dec 2023 – Jan 2024</span>
+        <span class="proj-badge badge-industry">Industry</span>
+      </div>
+      <div class="proj-title">Usability Testing Consultancy — Staging Application</div>
+      <div class="proj-body">Engaged as a usability testing consultant for a staging application at Queen Mary University of London. Designed and conducted testing sessions, synthesised findings, and delivered a clear report to the principal researcher to guide developer decisions ahead of product launch.</div>
+      <div class="proj-outcomes">
+        <div class="out-label">Deliverables</div>
+        <ul>
+          <li>Structured usability testing plan and session scripts</li>
+          <li>Findings report delivered to principal researcher</li>
+          <li>Actionable recommendations for development team</li>
+        </ul>
+      </div>
+      <div class="proj-tags">
+        <span class="tag">Usability Testing</span>
+        <span class="tag">Consulting</span>
+        <span class="tag">Research Report</span>
+      </div>
+    </div>
+
+    <!-- TRAVELOKA -->
+    <div class="proj-card cat-industry" data-cat="industry">
+      <div class="proj-meta">
+        <span class="proj-type">Industry · Traveloka · Jun – Sep 2018</span>
+        <span class="proj-badge badge-industry">Industry</span>
+      </div>
+      <div class="proj-title">Independent Travel Experience Research — Traveloka</div>
+      <div class="proj-body">Conducted independent research into user travel experience at Traveloka, one of Southeast Asia's leading travel platforms. Independently designed experiments, recruited participants, and analysed data. Also contributed to digital marketing efforts through Google Adwords and Facebook campaigns.</div>
+      <div class="proj-outcomes">
+        <div class="out-label">Activities</div>
+        <ul>
+          <li>End-to-end experiment design and participant recruitment</li>
+          <li>Data analysis and research reporting</li>
+          <li>Google Adwords &amp; Facebook marketing plan creation</li>
+        </ul>
+      </div>
+      <div class="proj-tags">
+        <span class="tag">UX Research</span>
+        <span class="tag">Experiment Design</span>
+        <span class="tag">Traveloka</span>
+        <span class="tag">Jakarta</span>
+      </div>
+    </div>
+
+    <!-- KOFERA -->
+    <div class="proj-card cat-industry" data-cat="industry">
+      <div class="proj-meta">
+        <span class="proj-type">Product · Kofera · Dec 2017 – Jun 2018</span>
+        <span class="proj-badge badge-industry">Industry</span>
+      </div>
+      <div class="proj-title">Product Design &amp; UX Research — Senior Product Consultant, Kofera</div>
+      <div class="proj-body">Worked cross-functionally with engineering, marketing, and finance teams to ship new product features. Conducted UX studies, developed wireframes and interactive prototypes, and managed ongoing stakeholder relationships. Responsible for translating user research insights into actionable product improvements.</div>
+      <div class="proj-tags">
+        <span class="tag">Product Design</span>
+        <span class="tag">Wireframing</span>
+        <span class="tag">Prototyping</span>
+        <span class="tag">Stakeholder Management</span>
+        <span class="tag">UX Research</span>
+      </div>
+    </div>
+
+    <!-- TEKZENIT -->
+    <div class="proj-card cat-industry" data-cat="industry">
+      <div class="proj-meta">
+        <span class="proj-type">Internship · Tekzenit Inc. · Jan – Aug 2014</span>
+        <span class="proj-badge badge-industry">Industry</span>
+      </div>
+      <div class="proj-title">UX Research Internship — Multi-Application Usability Studies</div>
+      <div class="proj-body">Assisted in usability testing across multiple client applications at Tekzenit Inc., Texas. Applied heuristic analysis, card sorting, and eye-tracking methodologies. Wrote research reports and client-facing presentations summarising findings and recommendations.</div>
+      <div class="proj-tags">
+        <span class="tag">Heuristic Analysis</span>
+        <span class="tag">Card Sorting</span>
+        <span class="tag">Eye Tracking</span>
+        <span class="tag">Usability Testing</span>
+        <span class="tag">Texas, USA</span>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <span>© 2026 Ulfa Octaviani</span>
+    <span>London, United Kingdom</span>
+  </footer>
+
+</div>
+</main>
+
+<script>
+  const btns = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.proj-card');
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+
+      cards.forEach(card => {
+        const match = filter === 'all' || card.dataset.cat === filter;
+        card.style.display = match ? '' : 'none';
+      });
+
+      // Handle featured card column span when hidden
+      const featured = document.querySelector('.proj-card.featured');
+      if (featured) {
+        if (filter !== 'all' && filter !== 'research') {
+          featured.style.gridColumn = '';
+        } else {
+          featured.style.gridColumn = '1 / -1';
+        }
+      }
+    });
+  });
+</script>
+</body>
+</html>
