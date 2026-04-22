@@ -231,6 +231,20 @@
     content: ''; flex: 1; height: 1px; background: var(--border);
   }
 
+  /* ── VIEW PROJECT LINK ── */
+  .view-project {
+    display: inline-flex; align-items: center; gap: 5px;
+    margin-top: 14px;
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--rust); text-decoration: none;
+    transition: gap 0.2s;
+  }
+  .view-project:hover { gap: 9px; }
+  .view-project.disabled {
+    color: var(--ink-faint); pointer-events: none;
+  }
+
   /* ── FOOTER ── */
   footer {
     border-top: 1px solid var(--border); padding: 1.8rem 0;
@@ -314,7 +328,7 @@
           <span class="tag">Data Visualisation</span>
           <span class="tag">Participatory Research</span>
         </div>
-      </div>
+        <a href="https://www.dara.org.uk/" class="view-project disabled"> Project website →</a>
       <div class="proj-right">
         <div class="proj-outcomes">
           <div class="out-label">Key Activities</div>
@@ -323,13 +337,14 @@
             <li>Extracting user needs and accessibility barriers to inform design guidelines</li>
             <li>Collaborating with interdisciplinary research team across City &amp; St. George's</li>
             <li>Contributing to academic publication pipeline on inclusive visualisation</li>
+            <li>Designed, created and maintain the website</li>
+            <li>Setting up and running workshops with people with Aphasia and Developmental Language Disease with colleagues</li>
           </ul>
         </div>
       </div>
     </div>
 
     <!-- BBC R&D -->
-    <a href="project-bbc.html" class="back-link">← Read more</a>
     <div class="proj-card cat-industry" data-cat="industry">
       <div class="proj-meta">
         <span class="proj-type">Industry Project · BBC R&amp;D · 2019</span>
@@ -351,9 +366,9 @@
         <span class="tag">BBC</span>
         <span class="tag">White Paper</span>
       </div>
+      <a href="phttps://www.bbc.co.uk/rd/publications/research-389-enhanced-podcast-interaction-user-experience-design-audio-visual" class="view-project">View Project →</a>
     </div>
-
-    <!-- PhD RESEARCH -->
+     
     <div class="proj-card cat-phd" data-cat="phd">
       <div class="proj-meta">
         <span class="proj-type">PhD Research · QMUL · 2018–2024</span>
@@ -376,33 +391,9 @@
         <span class="tag">QMUL</span>
         <span class="tag">EECS Scholarship</span>
       </div>
+      <a href="project-phd.html" class="view-project disabled">Coming soon →</a>
     </div>
 
-    <!-- GUI CURRICULUM -->
-    <div class="proj-card cat-teaching" data-cat="teaching">
-      <div class="proj-meta">
-        <span class="proj-type">Teaching Project · QMUL &amp; UAL · 2023–2024</span>
-        <span class="proj-badge badge-teaching">Teaching</span>
-      </div>
-      <div class="proj-title">GUI Curriculum Redesign: Figma, React &amp; Computational Inequality</div>
-      <div class="proj-body">Designed and delivered an updated Graphic User Interface module curriculum reaching 400+ undergraduate students at QMUL. Developed Figma and React lecture content, practical workshops, and assignment briefs. Simultaneously co-taught MA-level courses on Computational Inequality and Machine Learning for Personalisation at UAL.</div>
-      <div class="proj-outcomes">
-        <div class="out-label">Impact</div>
-        <ul>
-          <li>400+ students reached across GUI module</li>
-          <li>Trained demonstrators on new tools and pedagogy</li>
-          <li>Co-taught 2 MA courses at University of the Arts London</li>
-        </ul>
-      </div>
-      <div class="proj-tags">
-        <span class="tag">Figma</span>
-        <span class="tag">React</span>
-        <span class="tag">Curriculum Design</span>
-        <span class="tag">400+ Students</span>
-        <span class="tag">P5.js</span>
-        <span class="tag">ml5.js</span>
-      </div>
-    </div>
 
     <!-- USABILITY CONSULTING -->
     <div class="proj-card cat-industry" data-cat="industry">
@@ -425,6 +416,7 @@
         <span class="tag">Consulting</span>
         <span class="tag">Research Report</span>
       </div>
+      <!-- <a href="project-qmul-consulting.html" class="view-project disabled">Coming soon →</a> -->
     </div>
 
     <!-- TRAVELOKA -->
@@ -449,6 +441,7 @@
         <span class="tag">Traveloka</span>
         <span class="tag">Jakarta</span>
       </div>
+      <!-- <a href="project-traveloka.html" class="view-project disabled">Coming soon →</a> -->
     </div>
 
     <!-- KOFERA -->
@@ -466,6 +459,7 @@
         <span class="tag">Stakeholder Management</span>
         <span class="tag">UX Research</span>
       </div>
+      <!-- <a href="project-kofera.html" class="view-project disabled">Coming soon →</a> -->
     </div>
 
     <!-- TEKZENIT -->
@@ -483,6 +477,7 @@
         <span class="tag">Usability Testing</span>
         <span class="tag">Texas, USA</span>
       </div>
+      <!-- <a href="project-tekzenit.html" class="view-project disabled">Coming soon →</a> -->
     </div>
 
   </div>
