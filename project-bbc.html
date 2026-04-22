@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BBC R&D Usability Study — Ulfa Octaviani</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Outfit:wght@300;400;500&family=Space+Mono&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #FAFAF7;
+    --surface: #FFFFFF;
+    --ink: #18180F;
+    --ink-muted: #6A6A58;
+    --ink-faint: #AEAE98;
+    --rust: #C2410C;
+    --rust-bg: #FFF7ED;
+    --rust-border: #FED7AA;
+    --sage: #3D6B45;
+    --sage-bg: #F0FDF4;
+    --sage-border: #BBF7D0;
+    --plum: #6B21A8;
+    --plum-bg: #FAF5FF;
+    --plum-border: #E9D5FF;
+    --teal: #0E7490;
+    --teal-bg: #ECFEFF;
+    --teal-border: #A5F3FC;
+    --border: rgba(24,24,15,0.09);
+    --border-med: rgba(24,24,15,0.16);
+    --r: 4px;
+    --rl: 10px;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Outfit', sans-serif; font-size: 16px;
+    line-height: 1.7; font-weight: 300;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    height: 56px; background: rgba(250,250,247,0.92);
+    backdrop-filter: blur(14px); border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2.5rem;
+  }
+  .nav-name {
+    font-family: 'Playfair Display', serif; font-size: 17px;
+    color: var(--ink); text-decoration: none; letter-spacing: -0.2px;
+  }
+  .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+  .nav-links a {
+    font-size: 12px; font-weight: 400; letter-spacing: 0.07em;
+    text-transform: uppercase; color: var(--ink-muted); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--ink); }
+
+  /* ── LAYOUT ── */
+  main { padding-top: 56px; }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 0 2.5rem; }
+
+  /* ── BACK + BREADCRUMB ── */
+  .breadcrumb {
+    display: flex; align-items: center; gap: 8px;
+    padding: 2rem 0 0;
+    font-family: 'Space Mono', monospace; font-size: 10.5px;
+    text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint);
+  }
+  .breadcrumb a { color: var(--ink-faint); text-decoration: none; transition: color 0.2s; }
+  .breadcrumb a:hover { color: var(--rust); }
+  .breadcrumb span { color: var(--ink-muted); }
+
+  /* ── PROJECT HERO ── */
+  .proj-hero {
+    padding: 2.2rem 0 3rem;
+    animation: fadeUp 0.6s ease both;
+  }
+  .proj-hero-top {
+    display: flex; align-items: flex-start;
+    justify-content: space-between; gap: 2rem;
+    margin-bottom: 1.6rem;
+  }
+  .proj-category {
+    font-family: 'Space Mono', monospace; font-size: 10.5px;
+    text-transform: uppercase; letter-spacing: 0.15em;
+    color: var(--rust); margin-bottom: 0.7rem;
+  }
+  .proj-hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.9rem, 3.5vw, 2.8rem);
+    line-height: 1.1; letter-spacing: -0.8px; color: var(--ink);
+    max-width: 680px;
+  }
+  .proj-hero h1 em { font-style: italic; color: var(--rust); }
+
+  /* meta pills row */
+  .proj-meta-row {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin: 1.2rem 0 1.8rem;
+  }
+  .meta-pill {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    padding: 4px 11px; border-radius: 20px;
+    border: 1px solid var(--border-med); color: var(--ink-muted);
+    background: var(--surface); letter-spacing: 0.04em;
+  }
+  .meta-pill.highlight {
+    background: var(--rust-bg); border-color: var(--rust-border); color: var(--rust);
+  }
+
+  /* abstract / summary */
+  .proj-summary {
+    font-size: 1.05rem; color: var(--ink-muted);
+    line-height: 1.8; max-width: 720px;
+    border-left: 3px solid var(--rust);
+    padding-left: 1.2rem; margin-bottom: 0;
+  }
+
+  /* ── PUBLICATION LINK BANNER ── */
+  .pub-banner {
+    background: var(--ink); color: var(--bg);
+    border-radius: var(--rl); padding: 1.1rem 1.4rem;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1.5rem; margin: 2.4rem 0;
+    animation: fadeUp 0.6s ease 0.1s both;
+  }
+  .pub-banner-left { display: flex; align-items: center; gap: 14px; }
+  .pub-icon {
+    width: 38px; height: 38px; border-radius: 8px;
+    background: rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .pub-label {
+    font-family: 'Space Mono', monospace; font-size: 9.5px;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: rgba(250,250,247,0.45); margin-bottom: 3px;
+  }
+  .pub-title { font-size: 13.5px; font-weight: 400; color: var(--bg); line-height: 1.4; }
+  .pub-venue { font-size: 12px; color: rgba(250,250,247,0.5); margin-top: 2px; }
+  .pub-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 18px; border-radius: var(--r);
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18);
+    color: var(--bg); font-family: 'Space Mono', monospace;
+    font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em;
+    text-decoration: none; white-space: nowrap;
+    transition: background 0.2s; flex-shrink: 0;
+  }
+  .pub-btn:hover { background: rgba(255,255,255,0.18); }
+
+  /* ── SECTION SHARED ── */
+  .artifact-section { padding: 3.5rem 0; border-top: 1px solid var(--border); }
+  .artifact-section:first-of-type { border-top: none; }
+
+  .section-eyebrow {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.15em; color: var(--ink-faint);
+    margin-bottom: 6px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+    letter-spacing: -0.3px; margin-bottom: 0.8rem; line-height: 1.2;
+  }
+  .section-desc {
+    font-size: 14px; color: var(--ink-muted);
+    line-height: 1.75; max-width: 680px; margin-bottom: 2rem;
+  }
+
+  /* ── PROCESS STEPS ── */
+  .process-steps {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    gap: 0; position: relative; margin-bottom: 2.4rem;
+  }
+  .process-steps::before {
+    content: '';
+    position: absolute; top: 28px; left: 10%; right: 10%;
+    height: 1px; background: var(--border-med); z-index: 0;
+  }
+  .step {
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center; padding: 0 0.5rem; position: relative; z-index: 1;
+  }
+  .step-num {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--surface); border: 2px solid var(--border-med);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Mono', monospace; font-size: 12px;
+    color: var(--ink-muted); margin-bottom: 10px;
+    transition: all 0.2s;
+  }
+  .step.active .step-num {
+    background: var(--rust); border-color: var(--rust);
+    color: #fff; font-weight: 500;
+  }
+  .step-label {
+    font-family: 'Space Mono', monospace; font-size: 9.5px;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--ink-faint); line-height: 1.4;
+  }
+  .step.active .step-label { color: var(--rust); }
+  .step-detail {
+    font-size: 11.5px; color: var(--ink-muted);
+    margin-top: 5px; line-height: 1.5;
+  }
+
+  /* ── IMAGE SLOT ── */
+  .img-slot {
+    width: 100%; border-radius: var(--rl);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    overflow: hidden; position: relative;
+  }
+  .img-slot img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+  /* placeholder shown when src is empty or not swapped */
+  .img-placeholder {
+    width: 100%; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 10px; padding: 3rem 1rem;
+    background: repeating-linear-gradient(
+      -45deg,
+      var(--bg) 0px, var(--bg) 8px,
+      rgba(174,174,152,0.12) 8px, rgba(174,174,152,0.12) 16px
+    );
+  }
+  .img-placeholder .ph-icon { font-size: 28px; opacity: 0.35; }
+  .img-placeholder .ph-label {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--ink-faint); text-align: center;
+  }
+  .img-placeholder .ph-size {
+    font-family: 'Space Mono', monospace; font-size: 9px;
+    color: var(--ink-faint); opacity: 0.6;
+  }
+  .img-caption {
+    padding: 10px 14px;
+    font-size: 12px; color: var(--ink-faint);
+    font-style: italic; border-top: 1px solid var(--border);
+    background: var(--bg);
+  }
+
+  /* image grid layouts */
+  .img-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .img-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  .img-grid-main-aside {
+    display: grid; grid-template-columns: 1.6fr 1fr; gap: 16px;
+  }
+
+  /* ── USER JOURNEY SPECIFIC ── */
+  .journey-wrap {
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .journey-phase {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--rl); overflow: hidden;
+  }
+  .journey-phase-header {
+    display: grid;
+    grid-template-columns: 140px 1fr 1fr 1fr;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .jp-cell {
+    padding: 8px 14px;
+    font-family: 'Space Mono', monospace; font-size: 9.5px;
+    text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint);
+    border-right: 1px solid var(--border);
+  }
+  .jp-cell:last-child { border-right: none; }
+  .journey-phase-row {
+    display: grid;
+    grid-template-columns: 140px 1fr 1fr 1fr;
+    gap: 0; align-items: start;
+  }
+  .jr-phase-name {
+    padding: 14px; font-size: 12px; font-weight: 500;
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .phase-dot {
+    width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    margin-bottom: 4px;
+  }
+  .phase-dot.discover { background: var(--plum); }
+  .phase-dot.define   { background: var(--rust); }
+  .phase-dot.ideate   { background: var(--teal); }
+  .phase-dot.test     { background: var(--sage); }
+
+  .jr-cell {
+    padding: 14px; font-size: 12.5px; color: var(--ink-muted);
+    border-right: 1px solid var(--border); line-height: 1.6;
+  }
+  .jr-cell:last-child { border-right: none; }
+  .jr-cell ul { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+  .jr-cell li { display: flex; gap: 7px; align-items: baseline; }
+  .jr-cell li::before {
+    content: '·'; color: var(--ink-faint); flex-shrink: 0;
+    font-size: 14px; line-height: 1;
+  }
+  .emotion-bar {
+    display: flex; align-items: center; gap: 8px;
+    margin-top: 8px;
+  }
+  .emotion-label { font-size: 11px; color: var(--ink-faint); width: 52px; flex-shrink: 0; }
+  .emotion-track {
+    flex: 1; height: 6px; background: var(--border);
+    border-radius: 3px; overflow: hidden;
+  }
+  .emotion-fill {
+    height: 100%; border-radius: 3px;
+    background: linear-gradient(to right, var(--rust), var(--sage));
+  }
+
+  /* ── KEY FINDINGS ── */
+  .findings-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+  }
+  .finding-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--rl); padding: 1.2rem 1.3rem;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .finding-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; color: var(--rust); opacity: 0.25;
+    line-height: 1; flex-shrink: 0; margin-top: -4px;
+  }
+  .finding-title { font-weight: 500; font-size: 13.5px; margin-bottom: 4px; }
+  .finding-body  { font-size: 12.5px; color: var(--ink-muted); line-height: 1.6; }
+  .severity {
+    display: inline-block; margin-top: 8px;
+    font-family: 'Space Mono', monospace; font-size: 9px;
+    padding: 2px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .sev-high   { background: #FEE2E2; color: #B91C1C; }
+  .sev-med    { background: var(--rust-bg); color: var(--rust); }
+  .sev-low    { background: var(--sage-bg); color: var(--sage); }
+  .sev-info   { background: var(--teal-bg); color: var(--teal); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border); padding: 1.8rem 0; margin-top: 3rem;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 11px; color: var(--ink-faint); font-family: 'Space Mono', monospace;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .artifact-section { animation: fadeUp 0.55s ease both; }
+  .artifact-section:nth-child(2) { animation-delay: 0.07s; }
+  .artifact-section:nth-child(3) { animation-delay: 0.13s; }
+  .artifact-section:nth-child(4) { animation-delay: 0.19s; }
+  .artifact-section:nth-child(5) { animation-delay: 0.25s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 740px) {
+    .process-steps { grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .process-steps::before { display: none; }
+    .img-grid-2, .img-grid-main-aside { grid-template-columns: 1fr; }
+    .img-grid-3 { grid-template-columns: 1fr 1fr; }
+    .findings-grid { grid-template-columns: 1fr; }
+    .journey-phase-header, .journey-phase-row { grid-template-columns: 100px 1fr; }
+    .jp-cell:nth-child(3), .jp-cell:nth-child(4),
+    .jr-cell:nth-child(3), .jr-cell:nth-child(4) { display: none; }
+    .pub-banner { flex-direction: column; align-items: flex-start; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-name">Ulfa Octaviani</a>
+  <ul class="nav-links">
+    <li><a href="index.html#experience">Experience</a></li>
+    <li><a href="projects.html" class="active">Research &amp; Projects</a></li>
+    <li><a href="index.html#skills">Skills</a></li>
+    <li><a href="index.html#honours">Honours</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<main>
+<div class="wrap">
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="index.html">Portfolio</a>
+    <span>/</span>
+    <a href="projects.html">Projects</a>
+    <span>/</span>
+    <span style="color:var(--ink-muted);">BBC R&amp;D Usability Study</span>
+  </div>
+
+  <!-- PROJECT HERO -->
+  <div class="proj-hero">
+    <div class="proj-hero-top">
+      <div>
+        <p class="proj-category">Industry Project · BBC R&amp;D · Apr – Sep 2019</p>
+        <h1>Usability Study &amp; White Paper —<br><em>BBC R&amp;D Interactive Application</em></h1>
+      </div>
+    </div>
+    <div class="proj-meta-row">
+      <span class="meta-pill highlight">Industry</span>
+      <span class="meta-pill">Usability Testing</span>
+      <span class="meta-pill">Data Analysis in R</span>
+      <span class="meta-pill">White Paper</span>
+      <span class="meta-pill">BBC R&amp;D · London</span>
+      <span class="meta-pill">Apr – Sep 2019</span>
+    </div>
+    <p class="proj-summary">
+      An end-to-end usability study commissioned by BBC R&amp;D for an interactive research application. I independently recruited participants, designed and facilitated sessions, performed quantitative data analysis in R, and authored a white paper that directly informed the development team's design decisions.
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- 1. PUBLICATION / WHITE PAPER LINK             -->
+  <!-- ══════════════════════════════════════════════ -->
+  <!--
+    HOW TO ADD YOUR PUBLICATION:
+    Replace href="#" with your paper/white paper URL.
+    Update .pub-title and .pub-venue with the real title and venue.
+    If there's no public link, remove the <a class="pub-btn"> entirely.
+  -->
+  <div class="pub-banner">
+    <div class="pub-banner-left">
+      <div class="pub-icon">📄</div>
+      <div>
+        <div class="pub-label">White Paper </div>
+        <div class="pub-title">Enhanced podcast interaction stud — BBC R&amp;D</div>
+        <div class="pub-venue">BBC Research &amp; Development · Internal Report · 2019</div>
+      </div>
+    </div>
+    <a href="https://www.bbc.co.uk/rd/publications/research-389-enhanced-podcast-interaction-user-experience-design-audio-visual" class="pub-btn">Read Paper ↗</a>
+  </div>
+
+
+
+
+  
+
+
+  <!-- FOOTER -->
+  <footer>
+    <span>© 2026 Ulfa Octaviani</span>
+    <a href="projects.html" style="color:var(--ink-faint); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--rust)'" onmouseout="this.style.color='var(--ink-faint)'">← Back to all projects</a>
+  </footer>
+
+</div>
+</main>
+</body>
+</html>
