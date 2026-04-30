@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Corn Planting Predictor — Ulfa Octaviani</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Outfit:wght@300;400;500&family=Space+Mono&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #FAFAF7; --surface: #FFFFFF; --ink: #0E0E08; --ink-muted: #3D3D30; --ink-faint: #595950;
+    --amber: #B45309; --amber-bg: #FFFBEB; --amber-border: #FDE68A;
+    --sage: #3D6B45; --sage-bg: #F0FDF4; --sage-border: #BBF7D0;
+    --teal: #0E7490; --teal-bg: #ECFEFF; --teal-border: #A5F3FC;
+    --border: rgba(24,24,15,0.09); --border-med: rgba(24,24,15,0.16);
+    --r: 4px; --rl: 10px;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--ink); font-family: 'Outfit', sans-serif; font-size: 16px; line-height: 1.7; font-weight: 300; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; height: 56px; background: rgba(250,250,247,0.92); backdrop-filter: blur(14px); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 2.5rem; }
+  .nav-name { font-family: 'Playfair Display', serif; font-size: 17px; color: var(--ink); text-decoration: none; }
+  .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+  .nav-links a { font-size: 15px; font-weight: 400; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-muted); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--ink); }
+
+  main { padding-top: 56px; }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 0 2.5rem; }
+
+  .breadcrumb { display: flex; align-items: center; gap: 8px; padding: 2rem 0 0; font-family: 'Space Mono', monospace; font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint); }
+  .breadcrumb a { color: var(--ink-faint); text-decoration: none; transition: color 0.2s; }
+  .breadcrumb a:hover { color: var(--sage); }
+
+  .proj-hero { padding: 2.2rem 0 2.5rem; animation: fadeUp 0.6s ease both; }
+  .proj-category { font-family: 'Space Mono', monospace; font-size: 14px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--sage); margin-bottom: 0.7rem; }
+  .proj-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.9rem, 3.5vw, 2.8rem); line-height: 1.1; letter-spacing: -0.8px; max-width: 680px; }
+  .proj-hero h1 em { font-style: italic; color: var(--sage); }
+  .proj-meta-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 1.2rem 0 1.8rem; }
+  .meta-pill { font-family: 'Space Mono', monospace; font-size: 15px; padding: 4px 11px; border-radius: 20px; border: 1px solid var(--border-med); color: var(--ink-muted); background: var(--surface); }
+  .meta-pill.highlight { background: var(--sage-bg); border-color: var(--sage-border); color: var(--sage); }
+  .proj-summary { font-size: 1.05rem; color: var(--ink-muted); line-height: 1.8; max-width: 720px; border-left: 3px solid var(--sage); padding-left: 1.2rem; }
+
+  .artifact-section { padding: 3rem 0; border-top: 1px solid var(--border); animation: fadeUp 0.55s ease both; }
+  .section-eyebrow { font-family: 'Space Mono', monospace; font-size: 15px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--ink-faint); margin-bottom: 6px; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.35rem, 2.2vw, 1.7rem); letter-spacing: -0.3px; margin-bottom: 0.8rem; line-height: 1.2; }
+  .section-desc { font-size: 14px; color: var(--ink-muted); line-height: 1.75; max-width: 680px; margin-bottom: 1.8rem; }
+
+  .process-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; position: relative; margin-bottom: 2rem; }
+  .process-steps::before { content: ''; position: absolute; top: 22px; left: 10%; right: 10%; height: 1px; background: var(--border-med); z-index: 0; }
+  .step { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 0.4rem; position: relative; z-index: 1; }
+  .step-num { width: 44px; height: 44px; border-radius: 50%; background: var(--surface); border: 2px solid var(--border-med); display: flex; align-items: center; justify-content: center; font-family: 'Space Mono', monospace; font-size: 15px; color: var(--ink-muted); margin-bottom: 10px; }
+  .step.active .step-num { background: var(--sage); border-color: var(--sage); color: #fff; }
+  .step-label { font-family: 'Space Mono', monospace; font-size: 15px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-faint); line-height: 1.4; }
+  .step.active .step-label { color: var(--sage); }
+  .step-detail { font-size: 14px; color: var(--ink-muted); margin-top: 5px; line-height: 1.5; }
+
+  .img-slot { width: 100%; border-radius: var(--rl); border: 1px solid var(--border); background: var(--surface); overflow: hidden; }
+  .img-slot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .img-placeholder { width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 3rem 1rem; background: repeating-linear-gradient(-45deg, var(--bg) 0px, var(--bg) 8px, rgba(174,174,152,0.12) 8px, rgba(174,174,152,0.12) 16px); }
+  .img-placeholder .ph-icon { font-size: 28px; opacity: 0.35; }
+  .img-placeholder .ph-label { font-family: 'Space Mono', monospace; font-size: 15px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-faint); text-align: center; }
+  .img-placeholder .ph-size { font-family: 'Space Mono', monospace; font-size: 15px; color: var(--ink-faint); opacity: 0.6; }
+  .img-caption { padding: 10px 14px; font-size: 15px; color: var(--ink-faint); font-style: italic; border-top: 1px solid var(--border); background: var(--bg); }
+  .img-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .info-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 1.1rem 1.2rem; }
+  .info-card-label { font-family: 'Space Mono', monospace; font-size: 15px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--sage); margin-bottom: 6px; }
+  .info-card-title { font-weight: 500; font-size: 16px; margin-bottom: 5px; }
+  .info-card-body { font-size: 16px; color: var(--ink-muted); line-height: 1.6; }
+  .info-card ul { list-style: none; display: flex; flex-direction: column; gap: 4px; margin-top: 6px; }
+  .info-card li { font-size: 15px; color: var(--ink-muted); display: flex; gap: 7px; align-items: baseline; }
+  .info-card li::before { content: '→'; font-family: 'Space Mono', monospace; font-size: 15px; color: var(--sage); flex-shrink: 0; }
+
+  .prompt-block { background: var(--ink); color: var(--bg); border-radius: var(--rl); padding: 1.2rem 1.4rem; font-family: 'Space Mono', monospace; font-size: 15px; line-height: 1.7; margin-bottom: 1rem; }
+  .prompt-block .prompt-label { font-size: 15px; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(250,250,247,0.4); margin-bottom: 8px; }
+  .prompt-block .prompt-text { color: var(--bg); }
+
+  .insights-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .insight-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 1.1rem 1.2rem; display: flex; gap: 12px; }
+  .insight-num { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--sage); opacity: 0.25; line-height: 1; flex-shrink: 0; margin-top: -4px; }
+  .insight-title { font-weight: 500; font-size: 16px; margin-bottom: 4px; }
+  .insight-body { font-size: 16px; color: var(--ink-muted); line-height: 1.6; }
+
+  footer { border-top: 1px solid var(--border); padding: 1.8rem 0; margin-top: 3rem; display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: var(--ink-faint); font-family: 'Space Mono', monospace; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .artifact-section:nth-child(2) { animation-delay: 0.07s; } .artifact-section:nth-child(3) { animation-delay: 0.13s; } .artifact-section:nth-child(4) { animation-delay: 0.19s; } .artifact-section:nth-child(5) { animation-delay: 0.25s; }
+  @media (max-width: 740px) { .process-steps { grid-template-columns: 1fr 1fr; gap: 1rem; } .process-steps::before { display: none; } .img-grid-2, .card-grid, .insights-grid { grid-template-columns: 1fr; } .nav-links { display: none; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-name">Ulfa Octaviani</a>
+  <ul class="nav-links">
+    <li><a href="index.html#experience">Experience</a></li>
+    <li><a href="projects.html" class="active">Research &amp; Projects</a></li>
+    <li><a href="index.html#skills">Skills</a></li>
+    <li><a href="index.html#honours">Honours</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<main>
+<div class="wrap">
+
+  <div class="breadcrumb">
+    <a href="index.html">Portfolio</a>
+    <span>/</span>
+    <a href="projects.html">Projects</a>
+    <span>/</span>
+    <span style="color:var(--ink-muted);">Corn Planting Predictor</span>
+  </div>
+
+  <div class="proj-hero">
+    <p class="proj-category">Personal Project · Vibe Code · 2026</p>
+    <h1>Weather-based Corn Planting<br><em>Predictor — Java, Indonesia</em></h1>
+    <div class="proj-meta-row">
+      <span class="meta-pill highlight">Personal</span>
+      <span class="meta-pill">Python</span>
+      <span class="meta-pill">Gemini API</span>
+      <span class="meta-pill">Vibe coding</span>
+      <span class="meta-pill">Prompt engineering</span>
+      <span class="meta-pill">Java, Indonesia</span>
+    </div>
+    <p class="proj-summary">
+      A vibe-coded AI tool using Gemini to predict optimal corn planting windows for smallholder farmers in Java, Indonesia — built to explore how accessible AI tooling can support climate-adaptive agricultural decisions without requiring agronomist expertise.
+    </p>
+  </div>
+
+
+  <!-- 1. PROBLEM -->
+  <div class="artifact-section">
+    <p class="section-eyebrow">Artifact 01 — Domain research &amp; problem framing</p>
+    <h2 class="section-title">The Problem</h2>
+    <p class="section-desc">
+      Java's smallholder corn farmers — predominantly in Central and East Java — face increasing climate unpredictability. Rainy seasons arrive earlier or later than historical averages, and planting too early or too late relative to rainfall onset significantly reduces yield. Agronomist access is limited, and existing weather services don't translate forecast data into planting guidance.
+    </p>
+
+    <div class="card-grid">
+      <div class="info-card">
+        <div class="info-card-label">Context</div>
+        <div class="info-card-title">Smallholder farming in Java</div>
+        <div class="info-card-body">Java is one of Indonesia's main corn-producing regions. Most farms are under 2 hectares. Farmers rely on generational knowledge of seasonal planting windows — knowledge increasingly invalidated by climate change.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">Gap</div>
+        <div class="info-card-title">No accessible climate-adaptive guidance</div>
+        <div class="info-card-body">National weather agency (BMKG) provides forecasts but not planting recommendations. Agricultural extension services are under-resourced. There is no tool that bridges weather data and planting decisions for a non-specialist user.</div>
+      </div>
+    </div>
+
+    <div class="img-slot" style="margin-top:1.4rem;">
+      <div class="img-placeholder" style="min-height:200px;">
+        <div class="ph-icon">🌦</div>
+        <div class="ph-label">Map of Java corn-growing regions or rainfall pattern diagram</div>
+        <div class="ph-size">Recommended: 1200 × 480px</div>
+      </div>
+      <div class="img-caption">Fig 1. Java corn cultivation regions and typical rainy season onset variability</div>
+    </div>
+  </div>
+
+
+  <!-- 2. PROCESS -->
+  <div class="artifact-section">
+    <p class="section-eyebrow">Artifact 02 — Process</p>
+    <h2 class="section-title">Process</h2>
+    <p class="section-desc">A research-first vibe coding process — domain understanding before any code, then iterative prompt engineering to get Gemini producing actionable, contextually accurate recommendations.</p>
+
+    <div class="process-steps">
+      <div class="step active">
+        <div class="step-num">01</div>
+        <div class="step-label">Domain research</div>
+        <div class="step-detail">Corn agronomy in Java — key climate variables, planting calendar, soil moisture needs</div>
+      </div>
+      <div class="step active">
+        <div class="step-num">02</div>
+        <div class="step-label">Data sourcing</div>
+        <div class="step-detail">Identified weather data sources: BMKG, Open-Meteo API, historical rainfall datasets</div>
+      </div>
+      <div class="step active">
+        <div class="step-num">03</div>
+        <div class="step-label">Vibe coding</div>
+        <div class="step-detail">Built Python scaffold using Gemini API — weather data ingestion + prediction output</div>
+      </div>
+      <div class="step active">
+        <div class="step-num">04</div>
+        <div class="step-label">Prompt engineering</div>
+        <div class="step-detail">Iterated system prompt to ground Gemini in local agronomic context and produce farmer-readable output</div>
+      </div>
+      <div class="step active">
+        <div class="step-num">05</div>
+        <div class="step-label">Validation</div>
+        <div class="step-detail">Cross-checked recommendations against published BPTP planting calendars for Central Java</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 3. PROMPT ENGINEERING -->
+  <div class="artifact-section">
+    <p class="section-eyebrow">Artifact 03 — Prompt engineering</p>
+    <h2 class="section-title">Prompt Design</h2>
+    <p class="section-desc">
+      Getting Gemini to produce genuinely useful planting advice required grounding it in local agronomic context — not just passing raw weather data. The system prompt evolved across several iterations.
+    </p>
+
+    <div class="prompt-block">
+      <div class="prompt-label">System prompt — iteration 1 (too generic)</div>
+      <div class="prompt-text">"You are an agricultural assistant. Given weather forecast data, advise on the best time to plant corn."</div>
+    </div>
+    <div class="prompt-block">
+      <div class="prompt-label">System prompt — iteration 3 (contextualised)</div>
+      <div class="prompt-text">"You are an agricultural advisor for smallholder corn farmers in Java, Indonesia. Given a 14-day weather forecast for a specific regency, advise on optimal planting windows. Consider: rainfall onset (>10mm/day for 3 consecutive days signals monsoon onset), soil moisture recovery time, and the risk of planting into a dry spell. Output must be in plain language suitable for a farmer without agronomy training. Provide a recommended planting window, a risk level (low / medium / high), and one sentence of reasoning."</div>
+    </div>
+
+    <div class="img-grid-2" style="margin-top:1.4rem;">
+      <div class="img-slot">
+        <div class="img-placeholder" style="min-height:220px;">
+          <div class="ph-icon">💻</div>
+          <div class="ph-label">Screenshot of Python code / Gemini API call</div>
+          <div class="ph-size">Recommended: 580 × 380px</div>
+        </div>
+        <div class="img-caption">Fig 2a. Python code — weather data ingestion and Gemini API call</div>
+      </div>
+      <div class="img-slot">
+        <div class="img-placeholder" style="min-height:220px;">
+          <div class="ph-icon">🤖</div>
+          <div class="ph-label">Screenshot of Gemini output / prediction result</div>
+          <div class="ph-size">Recommended: 580 × 380px</div>
+        </div>
+        <div class="img-caption">Fig 2b. Sample Gemini output — planting window recommendation</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 4. KEY LEARNINGS -->
+  <div class="artifact-section">
+    <p class="section-eyebrow">Artifact 04 — Insights</p>
+    <h2 class="section-title">Key Learnings</h2>
+
+    <div class="insights-grid">
+      <div class="insight-card">
+        <div class="insight-num">01</div>
+        <div>
+          <div class="insight-title">Context in the system prompt matters more than the model</div>
+          <div class="insight-body">Generic prompts produced generic advice. Local agronomic context — monsoon onset thresholds, crop stage sensitivity — was what made the output actionable rather than obvious.</div>
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">02</div>
+        <div>
+          <div class="insight-title">Farmer-readable output is a design problem, not a model problem</div>
+          <div class="insight-body">Gemini could produce technically accurate recommendations — but "14-day precipitation accumulation exceeds 80mm" isn't useful to a farmer. Output format is a UX decision that lives in the prompt.</div>
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">03</div>
+        <div>
+          <div class="insight-title">Validation against domain standards is essential</div>
+          <div class="insight-body">Cross-checking against BPTP (agricultural technology assessment institute) planting calendars revealed that Gemini's recommendations aligned well for normal seasons but diverged on anomalous rainfall years — a real limitation.</div>
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">04</div>
+        <div>
+          <div class="insight-title">The real barrier is last-mile delivery, not prediction accuracy</div>
+          <div class="insight-body">A technically accurate planting predictor is only useful if a farmer can access it. Smartphone penetration in rural Java is growing but data costs remain a barrier. SMS delivery or WhatsApp integration would likely have more reach than a web app.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <span>© 2026 Ulfa Octaviani</span>
+    <a href="projects.html" style="color:var(--ink-faint); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--sage)'" onmouseout="this.style.color='var(--ink-faint)'">← Back to all projects</a>
+  </footer>
+
+</div>
+</main>
+</body>
+</html>
