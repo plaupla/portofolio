@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>London Cherry Blossom Map — Ulfa Octaviani</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Outfit:wght@300;400;500&family=Space+Mono&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #FAFAF7; --surface: #FFFFFF; --ink: #0E0E08; --ink-muted: #3D3D30; --ink-faint: #595950;
+    --rust: #C2410C; --rust-bg: #FFF7ED; --rust-border: #FED7AA;
+    --sage: #3D6B45; --sage-bg: #F0FDF4; --sage-border: #BBF7D0;
+    --amber: #B45309; --amber-bg: #FFFBEB; --amber-border: #FDE68A;
+    --teal: #0E7490; --teal-bg: #ECFEFF; --teal-border: #A5F3FC;
+    --pink: #BE185D; --pink-bg: #FDF2F8; --pink-border: #FBCFE8;
+    --border: rgba(24,24,15,0.09); --border-med: rgba(24,24,15,0.16);
+    --r: 4px; --rl: 10px;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--ink); font-family: 'Outfit', sans-serif; font-size: 16px; line-height: 1.7; font-weight: 300; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; height: 56px; background: rgba(250,250,247,0.92); backdrop-filter: blur(14px); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 2.5rem; }
+  .nav-name { font-family: 'Playfair Display', serif; font-size: 17px; color: var(--ink); text-decoration: none; letter-spacing: -0.2px; }
+  .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+  .nav-links a { font-size: 15px; font-weight: 400; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-muted); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--ink); }
+
+  main { padding-top: 56px; }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 0 2.5rem; }
+
+  .breadcrumb { display: flex; align-items: center; gap: 8px; padding: 2rem 0 0; font-family: 'Space Mono', monospace; font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint); }
+  .breadcrumb a { color: var(--ink-faint); text-decoration: none; transition: color 0.2s; }
+  .breadcrumb a:hover { color: var(--amber); }
+  .breadcrumb span { color: var(--ink-muted); }
+
+  .proj-hero { padding: 2.2rem 0 2.5rem; animation: fadeUp 0.6s ease both; }
+  .proj-category { font-family: 'Space Mono', monospace; font-size: 14px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--amber); margin-bottom: 0.7rem; }
+  .proj-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.9rem, 3.5vw, 2.8rem); line-height: 1.1; letter-spacing: -0.8px; color: var(--ink); max-width: 680px; }
+  .proj-hero h1 em { font-style: italic; color: var(--amber); }
+  .proj-meta-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 1.2rem 0 1.8rem; }
+  .meta-pill { font-family: 'Space Mono', monospace; font-size: 15px; padding: 4px 11px; border-radius: 20px; border: 1px solid var(--border-med); color: var(--ink-muted); background: var(--surface); letter-spacing: 0.04em; }
+  .meta-pill.highlight { background: var(--amber-bg); border-color: var(--amber-border); color: var(--amber); }
+  .proj-summary { font-size: 1.05rem; color: var(--ink-muted); line-height: 1.8; max-width: 720px; border-left: 3px solid var(--amber); padding-left: 1.2rem; }
+
+  /* github link banner */
+  .gh-banner { background: var(--ink); color: var(--bg); border-radius: var(--rl); padding: 1rem 1.4rem; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; margin: 2.2rem 0; animation: fadeUp 0.6s ease 0.1s both; }
+  .gh-banner-left { display: flex; align-items: center; gap: 12px; }
+  .gh-icon { width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .gh-label { font-family: 'Space Mono', monospace; font-size: 15px; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(250,250,247,0.45); margin-bottom: 2px; }
+  .gh-title { font-size: 16px; color: var(--bg); }
+  .gh-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: var(--r); background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18); color: var(--bg); font-family: 'Space Mono', monospace; font-size: 15px; text-transform: uppercase; letter-spacing: 0.08em; text-decoration: none; white-space: nowrap; transition: background 0.2s; flex-shrink: 0; }
+  .gh-btn:hover { background: rgba(255,255,255,0.2); }
+
+  /* sections */
+  .artifact-section { padding: 3rem 0; border-top: 1px solid var(--border); animation: fadeUp 0.55s ease both; }
+  .section-eyebrow { font-family: 'Space Mono', monospace; font-size: 15px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--ink-faint); margin-bottom: 6px; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.35rem, 2.2vw, 1.7rem); letter-spacing: -0.3px; margin-bottom: 0.8rem; line-height: 1.2; }
+  .section-desc { font-size: 14px; color: var(--ink-muted); line-height: 1.75; max-width: 680px; margin-bottom: 1.8rem; }
+
+  /* process steps */
+  .process-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; position: relative; margin-bottom: 2rem; }
+  .process-steps::before { content: ''; position: absolute; top: 22px; left: 10%; right: 10%; height: 1px; background: var(--border-med); z-index: 0; }
+  .step { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 0.4rem; position: relative; z-index: 1; }
+  .step-num { width: 44px; height: 44px; border-radius: 50%; background: var(--surface); border: 2px solid var(--border-med); display: flex; align-items: center; justify-content: center; font-family: 'Space Mono', monospace; font-size: 15px; color: var(--ink-muted); margin-bottom: 10px; }
+  .step.active .step-num { background: var(--amber); border-color: var(--amber); color: #fff; }
+  .step-label { font-family: 'Space Mono', monospace; font-size: 15px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-faint); line-height: 1.4; }
+  .step.active .step-label { color: var(--amber); }
+  .step-detail { font-size: 14px; color: var(--ink-muted); margin-top: 5px; line-height: 1.5; }
+
+  /* image slots */
+  .img-slot { width: 100%; border-radius: var(--rl); border: 1px solid var(--border); background: var(--surface); overflow: hidden; }
+  .img-slot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .img-placeholder { width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 3rem 1rem; background: repeating-linear-gradient(-45deg, var(--bg) 0px, var(--bg) 8px, rgba(174,174,152,0.12) 8px, rgba(174,174,152,0.12) 16px); }
+  .img-placeholder .ph-icon { font-size: 28px; opacity: 0.35; }
+  .img-placeholder .ph-label { font-family: 'Space Mono', monospace; font-size: 15px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-faint); text-align: center; }
+  .img-placeholder .ph-size { font-family: 'Space Mono', monospace; font-size: 15px; color: var(--ink-faint); opacity: 0.6; }
+  .img-caption { padding: 10px 14px; font-size: 15px; color: var(--ink-faint); font-style: italic; border-top: 1px solid var(--border); background: var(--bg); }
+  .img-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  /* iteration cards */
+  .iter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 1.6rem; }
+  .iter-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 1.1rem 1.2rem; }
+  .iter-label { font-family: 'Space Mono', monospace; font-size: 15px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--amber); margin-bottom: 6px; }
+  .iter-title { font-weight: 500; font-size: 16px; margin-bottom: 5px; }
+  .iter-body { font-size: 16px; color: var(--ink-muted); line-height: 1.6; }
+  .iter-card ul { list-style: none; display: flex; flex-direction: column; gap: 4px; margin-top: 6px; }
+  .iter-card li { font-size: 15px; color: var(--ink-muted); display: flex; gap: 7px; align-items: baseline; }
+  .iter-card li::before { content: '→'; font-family: 'Space Mono', monospace; font-size: 15px; color: var(--amber); flex-shrink: 0; }
+
+  /* insight cards */
+  .insights-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .insight-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 1.1rem 1.2rem; display: flex; gap: 12px; }
+  .insight-num { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--amber); opacity: 0.25; line-height: 1; flex-shrink: 0; margin-top: -4px; }
+  .insight-title { font-weight: 500; font-size: 16px; margin-bottom: 4px; }
+  .insight-body { font-size: 16px; color: var(--ink-muted); line-height: 1.6; }
+
+  /* future section */
+  .future-list { display: flex; flex-direction: column; gap: 10px; }
+  .future-item { display: flex; gap: 14px; align-items: flex-start; padding: 12px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); }
+  .future-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border-med); flex-shrink: 0; margin-top: 7px; }
+  .future-dot.active { background: var(--amber); }
+  .future-item-title { font-size: 16px; font-weight: 500; margin-bottom: 2px; }
+  .future-item-body { font-size: 16px; color: var(--ink-muted); line-height: 1.6; }
+
+  footer { border-top: 1px solid var(--border); padding: 1.8rem 0; margin-top: 3rem; display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: var(--ink-faint); font-family: 'Space Mono', monospace; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .artifact-section:nth-child(2) { animation-delay: 0.07s; }
+  .artifact-section:nth-child(3) { animation-delay: 0.13s; }
+  .artifact-section:nth-child(4) { animation-delay: 0.19s; }
+  .artifact-section:nth-child(5) { animation-delay: 0.25s; }
+
+  @media (max-width: 740px) {
+    .process-steps { grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .process-steps::before { display: none; }
+    .img-grid-2, .iter-grid, .insights-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-name">Ulfa Octaviani</a>
+  <ul class="nav-links">
+    <li><a href="index.html#experience">Experience</a></li>
+    <li><a href="projects.html" class="active">Research &amp; Projects</a></li>
+    <li><a href="index.html#skills">Skills</a></li>
+    <li><a href="index.html#honours">Honours</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<main>
+<div class="wrap">
+
+  <div class="breadcrumb">
+    <a href="index.html">Portfolio</a>
+    <span>/</span>
+    <a href="projects.html">Projects</a>
+    <span>/</span>
+    <span style="color:var(--ink-muted);">London Cherry Blossom Map</span>
+  </div>
+
+  <div class="proj-hero">
+    <p class="proj-category">Personal Project · March 2026</p>
+    <h1>London Cherry<br><em>Blossom Map</em></h1>
+    <div class="proj-meta-row">
+      <span class="meta-pill highlight">Personal</span>
+      <span class="meta-pill">HTML · Leaflet.js</span>
+      <span class="meta-pill">Open data</span>
+      <span class="meta-pill">Vibe coding</span>
+      <span class="meta-pill">Mar 2026</span>
+    </div>
+    <p class="proj-summary">
+      An interactive map tracking cherry blossom bloom locations and timing across London — built in response to climate change making traditional bloom timing unpredictable. Started with a single vibe-coded prompt and iterated based on real-world manual testing.
+    </p>
+  </div>
+
+  <!-- GITHUB LINK -->
+  <div class="gh-banner">
+    <div class="gh-banner-left">
+      <div class="gh-icon">⌥</div>
+      <div>
+        <div class="gh-label">Source code</div>
+        <div class="gh-title">plaupla / London-Cherry-Blossom-Map</div>
+      </div>
+    </div>
+    <a href="https://github.com/plaupla/London-Cherry-Blossom-Map" target="_blank" class="gh-btn">View on GitHub ↗</a>
+  </div>
+
+
+  <!-- 1. PROBLEM & CONTEXT -->
+  <div class="artifact-section">
+    <p class="section-eyebrow">Artifact 01 — Problem framing</p>
+    <h2 class="section-title">The Problem</h2>
+    <p class="section-desc">
+      Cherry blossom season in London is one of the most searched-for seasonal events — but existing resources were static, inaccurate, or required knowing where to look. Climate change has shifted bloom timing year by year, making forecasts based on historical averages unreliable. The only reliable source was social media in real time.
+    </p>
+
+    <div class="iter-grid">
+      <div class="iter-card">
+        <div class="iter-label">Existing solution</div>
+        <div class="iter-title">Marked Google Maps</div>
+        <div class="iter-body">The best public resource was a crowd-edited Google Map with static pins. No bloom status, no timing, no way to know if a location had already peaked or not yet bloomed.</div>
+      </div>
+      <div class="iter-card">
+        <div class="iter-label">Reference model</div>
+        <div class="iter-title">Japan Meteorological Corporation Forecast</div>
+        <div class="iter-body">Japan's cherry blossom forecasting model — released annually by JMC — served as a conceptual reference for how bloom prediction could work, combining temperature data with species-specific bloom models.</div>
+      </div>
+    </div>
+
+    <!--
+      IMAGE SLOT: Screenshot of existing Google Map or comparable resource
+      Recommended: 1200 × 480px
+    -->
+    <div class="img-slot">
+      <div class="img-placeholder" style="min-height:200px;">
+        <div class="ph-icon">🗺</div>
+        <div class="ph-label">Screenshot of existing cherry blossom map resources (Google Maps, existing sites)</div>
+        <div class="ph-size">Recommended: 1200 × 480px</div>
+      </div>
+      <div class="img-caption">Fig 1. Existing resources — static pins, no bloom status, no timing information</div>
+    </div>
+  </div>
+
+
+  <!-- 2. PROCESS -->
+  <div class="artifact-section">
+    <p class="section-eyebrow">Artifact 02 — Methodology</p>
+    <h2 class="section-title">Process</h2>
+    <p class="section-desc">A fast iterative process — from a single vibe-coded prompt through to manual real-world accuracy testing and a second iteration incorporating new locations and bloom status updates.</p>
+
+    <div class="process-steps">
+      <div class="step active">
+        <div class="step-num">01</div>
+        <div class="step-label">Problem framing</div>
+        <div class="step-detail">Identified gap between what people needed (real-time bloom status) and what existed (static pins)</div>
+      </div>
+      <div class="step active">
+        <div class="step-num">02</div>
+        <div class="step-label">Vibe coding</div>
+        <div class="step-detail">Single prompt: "create a map showing cherry blossom locations in London and timing"</div>
+      </div>
+      <div class="step active">
+        <div class="step-num">03</div>
+        <div class="step-label">Manual testing</div>
+        <div class="step-detail">Cross-checked map against Instagram — Kew Gardens, #CherryBlossomLondon, influencer stories</div>
+      </div>
+      <div class="step active">
+        <div class="step-num">04</div>
+        <div class="step-label">Iteration</div>
+        <div class="step-detail">Added unlisted locations (Swiss Cottage), improved accuracy, refined bloom status labels</div>
+      </div>
+      <div class="step active">
+        <div class="step-num">05</div>
+        <div class="step-label">Future scope</div>
+        <div class="step-detail">Mapped out API needs, user interaction model, and database design for next year's forecast</div>
+      </div>
+    </div>
+
+    <!--
+      IMAGE SLOT: Your vibe-coding prompt screenshot or VS Code screenshot
+      Recommended: 1200 × 500px
+    -->
+    <div class="img-slot">
+      <div class="img-placeholder" style="min-height:220px;">
+        <div class="ph-icon">💻</div>
+        <div class="ph-label">Screenshot of VS Code or initial vibe-coding prompt / output</div>
+        <div class="ph-size">Recommended: 1200 × 500px</div>
+      </div>
+      <div class="img-caption">Fig 2. Iteration 1 — initial map output from the first vibe-coded prompt</div>
+    </div>
+  </div>
+
+
+  <!-- 3. ITERATIONS -->
+  <div class="artifact-section">
+    <p class="section-eyebrow">Artifact 03 — Iterations</p>
+    <h2 class="section-title">Iteration Log</h2>
+    <p class="section-desc">Two main iterations, each driven by a specific question about accuracy or completeness — not by assumptions.</p>
+
+    <div class="iter-grid" style="margin-bottom: 1.4rem;">
+      <div class="iter-card">
+        <div class="iter-label">Iteration 1 — Mar 2026</div>
+        <div class="iter-title">First working map</div>
+        <div class="iter-body">Generated from a single prompt. Showed location pins and rough timing labels. Looked reasonable — but how accurate was it?</div>
+        <ul>
+          <li>Checked Kew Gardens Instagram for live bloom updates</li>
+          <li>Cross-referenced #CherryBlossomLondon hashtag</li>
+          <li>Monitored influencer stories for real-time status</li>
+        </ul>
+      </div>
+      <div class="iter-card">
+        <div class="iter-label">Iteration 2 — Mar 2026</div>
+        <div class="iter-title">Accuracy &amp; new locations</div>
+        <div class="iter-body">Manual testing revealed Battersea Park was blooming. Swiss Cottage — an unlisted spot — was also blooming. Neither appeared in the first version.</div>
+        <ul>
+          <li>Added Battersea Park with accurate bloom status</li>
+          <li>Added Swiss Cottage as a newly discovered location</li>
+          <li>Raised question: how to enable real-time data updates?</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="img-grid-2">
+      <!--
+        IMAGE SLOT: Side-by-side map iteration screenshots
+        Recommended: 580 × 380px each
+      -->
+      <div class="img-slot">
+        <div class="img-placeholder" style="min-height:220px;">
+          <div class="ph-icon">🗺</div>
+          <div class="ph-label">Map iteration 1 — screenshot</div>
+          <div class="ph-size">Recommended: 580 × 380px</div>
+        </div>
+        <div class="img-caption">Fig 3a. Iteration 1 — initial output</div>
+      </div>
+      <div class="img-slot">
+        <div class="img-placeholder" style="min-height:220px;">
+          <div class="ph-icon">🗺</div>
+          <div class="ph-label">Map iteration 2 — screenshot with new locations added</div>
+          <div class="ph-size">Recommended: 580 × 380px</div>
+        </div>
+        <div class="img-caption">Fig 3b. Iteration 2 — Battersea Park &amp; Swiss Cottage added</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 4. KEY LEARNINGS -->
+  <div class="artifact-section">
+    <p class="section-eyebrow">Artifact 04 — Insights</p>
+    <h2 class="section-title">Key Learnings</h2>
+    <p class="section-desc">What the process surfaced — about the problem, the tool, and what a real solution would need.</p>
+
+    <div class="insights-grid">
+      <div class="insight-card">
+        <div class="insight-num">01</div>
+        <div>
+          <div class="insight-title">Social media is the most accurate real-time data source</div>
+          <div class="insight-body">Instagram and hashtag tracking outperformed any static dataset for current bloom status. A real solution needs a social listening or community-submission layer.</div>
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">02</div>
+        <div>
+          <div class="insight-title">Unlisted locations are a significant gap</div>
+          <div class="insight-body">Swiss Cottage was actively blooming but absent from every existing map. User-submitted locations would be essential for full coverage.</div>
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">03</div>
+        <div>
+          <div class="insight-title">Vibe coding is fast for prototyping, not for accuracy</div>
+          <div class="insight-body">The first prompt produced a visually usable map in minutes — but manual validation was still essential. Speed of generation ≠ accuracy of data.</div>
+        </div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">04</div>
+        <div>
+          <div class="insight-title">The interesting problem is forecasting, not mapping</div>
+          <div class="insight-body">Showing current bloom status is useful. Predicting next week's peak bloom locations — using temperature data and species models — would be genuinely novel for London.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 5. FUTURE ITERATIONS -->
+  <div class="artifact-section">
+    <p class="section-eyebrow">Artifact 05 — Next steps</p>
+    <h2 class="section-title">Future Iterations</h2>
+    <p class="section-desc">The questions this project opened up — mapped to concrete next steps.</p>
+
+    <div class="future-list">
+      <div class="future-item">
+        <div class="future-dot active"></div>
+        <div>
+          <div class="future-item-title">User interaction model</div>
+          <div class="future-item-body">What interactions do users need? Report a bloom, save a location, get notified when a park peaks? Need to define the core user task before building any UI.</div>
+        </div>
+      </div>
+      <div class="future-item">
+        <div class="future-dot active"></div>
+        <div>
+          <div class="future-item-title">Real-time data API</div>
+          <div class="future-item-body">Which API can provide live or near-live bloom status data? Options include weather APIs (for temperature-based prediction), iNaturalist (citizen science observations), or a community submission model.</div>
+        </div>
+      </div>
+      <div class="future-item">
+        <div class="future-dot"></div>
+        <div>
+          <div class="future-item-title">Bloom database — building from this year onwards</div>
+          <div class="future-item-body">Collect bloom dates, locations, and peak timing this season to start building a London-specific dataset. Next year's forecast depends on this year's data.</div>
+        </div>
+      </div>
+      <div class="future-item">
+        <div class="future-dot"></div>
+        <div>
+          <div class="future-item-title">Forecasting model</div>
+          <div class="future-item-body">Use accumulated bloom data + temperature records to build a species-specific bloom prediction model for London, similar to Japan Meteorological Corporation's sakura forecast.</div>
+        </div>
+      </div>
+      <div class="future-item">
+        <div class="future-dot"></div>
+        <div>
+          <div class="future-item-title">Deployment</div>
+          <div class="future-item-body">Consider deployment options — GitHub Pages for a static version, or a lightweight backend if real-time community submissions are added.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <span>© 2026 Ulfa Octaviani</span>
+    <a href="projects.html" style="color:var(--ink-faint); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--amber)'" onmouseout="this.style.color='var(--ink-faint)'">← Back to all projects</a>
+  </footer>
+
+</div>
+</main>
+</body>
+</html>
